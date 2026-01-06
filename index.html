@@ -1,68 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base target="_top">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    :root { --m-navy: #050A18; --m-gold: #D4AF37; --m-crimson: #8E1616; --parchment: #FDF5E6; }
-    body { background-color: var(--m-navy); font-family: 'Noto Serif TC', serif; height: 100vh; display: flex; align-items: center; margin: 0; overflow: hidden; }
-    #loader { position: fixed; inset: 0; background: var(--m-navy); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 1s; }
-    .magic-array { width: 140px; height: 140px; border: 4px ridge var(--m-gold); border-radius: 50%; border-top-color: transparent; animation: rotate 1s linear infinite; box-shadow: 0 0 40px var(--m-gold); }
-    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    canvas { position: fixed; inset: 0; z-index: -1; }
-    .magic-panel { background: var(--parchment); color: #2A1A14; border: 3px solid var(--m-gold); border-radius: 15px; box-shadow: 0 0 50px rgba(212, 175, 55, 0.3); padding: 40px; background-image: url('https://www.transparenttextures.com/patterns/paper.png'); width: 92%; max-width: 420px; margin: auto; text-align: center; }
-    h1 { font-family: 'Cinzel Decorative', cursive; color: var(--m-gold); text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); }
-    .btn-magic { background: linear-gradient(135deg, #8E1616, #4A0000); color: var(--m-gold); border: 1px solid var(--m-gold); font-family: 'Cinzel Decorative'; font-weight: bold; padding: 12px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南大魔法學院 - 入口</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --m-navy: #050A18; --m-gold: #D4AF37; --m-crimson: #8E1616; --parchment: #FDF5E6; }
+        body { background-color: var(--m-navy); font-family: 'Noto Serif TC', serif; height: 100vh; display: flex; align-items: center; margin: 0; overflow: hidden; }
+        .magic-panel { background: var(--parchment); color: #2A1A14; border: 3px solid var(--m-gold); border-radius: 15px; box-shadow: 0 0 50px rgba(212, 175, 55, 0.3); padding: 40px; background-image: url('https://www.transparenttextures.com/patterns/paper.png'); width: 90%; max-width: 420px; margin: auto; text-align: center; }
+        h1 { font-family: 'Cinzel Decorative', cursive; color: var(--m-gold); text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); }
+        .btn-magic { background: linear-gradient(135deg, #8E1616, #4A0000); color: var(--m-gold); border: 1px solid var(--m-gold); font-family: 'Cinzel Decorative'; font-weight: bold; padding: 12px; }
+    </style>
 </head>
 <body>
-  <div id="loader"><div class="magic-array"></div><h4 class="mt-4 text-white">正在召喚入學通道...</h4></div>
-  <canvas id="canvas"></canvas>
-  <div class="magic-panel shadow-lg">
-    <h1>Academy Portal</h1>
-    <hr style="border-color: var(--m-gold);">
-    <div id="login-box">
-      <input type="text" id="u" class="form-control mb-3" placeholder="學員編號">
-      <input type="password" id="p" class="form-control mb-2" placeholder="咒語">
-      <div class="mb-4 text-start small"><input type="checkbox" id="sp1" onclick="document.getElementById('p').type=this.checked?'text':'password'"> <label style="cursor:pointer; color:#2A1A14">顯示密碼</label></div>
-      <button class="btn btn-magic w-100 py-3" id="loginBtn" onclick="doLogin()">進入學院 (Login)</button>
-      <button class="btn btn-link mt-3 text-dark small w-100" onclick="toggleAuth(true)">申請入學契約</button>
+    <div class="magic-panel">
+        <h1>Academy Portal</h1>
+        <hr style="border-color: var(--gold);">
+        <div id="login-box">
+            <input type="text" id="u" class="form-control mb-3" placeholder="學員編號">
+            <input type="password" id="p" class="form-control mb-2" placeholder="咒語">
+            <div class="mb-4 text-start small"><input type="checkbox" onclick="document.getElementById('p').type=this.checked?'text':'password'"> 顯示密碼</div>
+            <button class="btn btn-magic w-100" id="loginBtn" onclick="doLogin()">進入學院</button>
+            <button class="btn btn-link mt-3 text-dark small w-100" onclick="toggleReg(true)">申請入學契約</button>
+        </div>
+        <div id="reg-box" style="display:none;">
+            <input type="text" id="ru" class="form-control mb-3" placeholder="新編號">
+            <input type="password" id="rp" class="form-control mb-3" placeholder="設定密碼">
+            <input type="text" id="rn" class="form-control mb-3" placeholder="暱稱">
+            <button class="btn btn-success w-100 py-3" onclick="doReg()">簽署契約</button>
+            <button class="btn btn-link mt-2 text-dark w-100" onclick="toggleReg(false)">返回</button>
+        </div>
     </div>
-    <div id="reg-box" style="display:none;">
-      <input type="text" id="ru" class="form-control mb-3" placeholder="新編號">
-      <input type="password" id="rp" class="form-control mb-2" placeholder="密碼">
-      <div class="mb-3 text-start small"><input type="checkbox" id="sp2" onclick="document.getElementById('rp').type=this.checked?'text':'password'"> <label style="cursor:pointer;">顯示密碼</label></div>
-      <input type="text" id="rn" class="form-control mb-3" placeholder="暱稱">
-      <button class="btn btn-success w-100 py-3" onclick="doReg()">簽署契約</button>
-      <button class="btn btn-link mt-2 text-dark w-100" onclick="toggleAuth(false)">返回</button>
-    </div>
-  </div>
-  <script>
-    window.onload = () => { setTimeout(() => { document.getElementById('loader').style.display='none'; }, 1500); initP(); draw(); };
-    function togglePass(id) { const x = document.getElementById(id); x.type = x.type==="password"?"text":"password"; }
-    function toggleAuth(s) { document.getElementById('login-box').style.display=s?'none':'block'; document.getElementById('reg-box').style.display=s?'block':'none'; }
-    function doLogin() {
-      const u=document.getElementById('u').value, p=document.getElementById('p').value, btn=document.getElementById('loginBtn');
-      if(!u || !p) return;
-      btn.innerText = "驗證契約中..."; btn.disabled = true;
-      google.script.run.withSuccessHandler(res => {
-        if(res.status==="success") {
-          // 【核心修復】帶參數跳轉 GitHub 的 main.html
-          const currentPath = window.top.location.href;
-          const targetUrl = currentUrl.split('index.html')[0] + `main.html?uid=${res.uid}&nick=${encodeURIComponent(res.nickname)}`;
-          window.top.location.href = targetUrl;
-        } else { alert("驗證失敗"); btn.innerText = "進入學院"; btn.disabled = false; }
-      }).login(u, p);
-    }
-    function doReg() {
-      const ru=document.getElementById('ru').value, rp=document.getElementById('rp').value, rn=document.getElementById('rn').value;
-      google.script.run.withSuccessHandler(m => { alert(m); toggleAuth(false); }).registerUser(ru, rp, rn);
-    }
-    const cn=document.getElementById('canvas'), ctx=cn.getContext('2d');
-    let pts=[];
-    function initP() { cn.width=window.innerWidth; cn.height=window.innerHeight; pts=[]; for(let i=0;i<150;i++) pts.push({x:Math.random()*cn.width, y:Math.random()*cn.height, r:Math.random()*2+1, dy:Math.random()*-0.5, a:Math.random()}); }
-    function draw() { ctx.clearRect(0,0,cn.width,cn.height); pts.forEach(p=>{ ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle=`rgba(212,175,55,${p.a})`; ctx.fill(); p.y+=p.dy; if(p.y<0) p.y=cn.height; }); requestAnimationFrame(draw); }
-  </script>
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbwaFDlfsrR39Nr882_WkyVqgSeDW64pTwIXKf9_MUV1ZnSvVbM27mOGG6BrKejOWLa_ng/exec"; // 替換處
+
+        function toggleReg(s) { document.getElementById('login-box').style.display=s?'none':'block'; document.getElementById('reg-box').style.display=s?'block':'none'; }
+
+        async function doLogin() {
+            const u = document.getElementById('u').value, p = document.getElementById('p').value, btn = document.getElementById('loginBtn');
+            btn.innerText = "驗證中..."; btn.disabled = true;
+            const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'login', u: u.trim(), p: p.trim() }) }).then(r => r.json());
+            if(res.status === "success") {
+                window.location.href = `main.html?uid=${res.uid}&nick=${encodeURIComponent(res.nickname)}`;
+            } else { alert("驗證失敗"); btn.innerText = "進入學院"; btn.disabled = false; }
+        }
+
+        async function doReg() {
+            const ru=document.getElementById('ru').value, rp=document.getElementById('rp').value, rn=document.getElementById('rn').value;
+            const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'register', u: ru, p: rp, n: rn }) }).then(r => r.json());
+            alert(res.msg); toggleReg(false);
+        }
+    </script>
 </body>
 </html>
